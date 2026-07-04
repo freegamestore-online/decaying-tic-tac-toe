@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+
+  --radius-card: 1.25rem;
+  --radius-button: 0.75rem;
+  --spacing-sidebar: 17rem;
+  --spacing-card: 1.5rem;
+  --spacing-grid: 1.25rem;
+}
+
+html {
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at top left, var(--bg-blob-1), transparent 32%),
+    radial-gradient(circle at top right, var(--bg-blob-2), transparent 30%),
+    linear-gradient(180deg, var(--bg-start) 0%, var(--bg-mid) 52%, var(--bg-end) 100%);
+  color: var(--ink);
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  letter-spacing: -0.015em;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(70px);
+}
+
+body::before {
+  left: -10rem;
+  top: 10rem;
+  height: 20rem;
+  width: 20rem;
+  background: var(--glow-warm);
+}
+
+body::after {
+  right: -8rem;
+  bottom: 8rem;
+  height: 18rem;
+  width: 18rem;
+  background: var(--glow-cool);
+}
+
+#root {
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  isolation: isolate;
+}
+
+button,
+a,
+nav,
+[role="button"],
+label {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.display-font {
+  font-family: "Fraunces", Georgia, serif;
+  font-variation-settings: "SOFT" 80, "WONK" 0;
+  letter-spacing: -0.04em;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+button,
+a {
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+button:active {
+  transform: scale(0.985);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--sky) 52%, white);
+  outline-offset: 3px;
+}
+
+@media (min-width: 1024px) {
+  body {
+    background:
+      radial-gradient(circle at 18% 8%, var(--bg-blob-1), transparent 24%),
+      radial-gradient(circle at 88% 14%, var(--bg-blob-2), transparent 24%),
+      linear-gradient(180deg, var(--bg-start) 0%, var(--bg-mid) 48%, var(--bg-end) 100%);
+  }
+}
+
+.app-shell {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+.app-shell::before,
+.app-shell::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.app-shell::before {
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(13, 148, 136, 0.09), transparent 32%),
+    radial-gradient(circle at 80% 10%, rgba(245, 158, 11, 0.08), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(26, 24, 20, 0.03), transparent 24%);
+  filter: blur(4px);
+}
+
+.app-shell::after {
+  inset: auto 12% 10% auto;
+  width: min(48vw, 26rem);
+  height: min(48vw, 26rem);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(13, 148, 136, 0.08), transparent 70%);
+}
+
+.cell-expiring {
+  animation: decay-blink 1s steps(2, end) infinite;
+}
+
+@keyframes decay-blink {
+  0%,
+  49% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50%,
+  100% {
+    opacity: 0.48;
+    transform: scale(0.995);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cell-expiring {
+    animation: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-shell {
+    flex-direction: row;
+  }
+}

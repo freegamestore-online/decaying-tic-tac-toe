@@ -1,0 +1,11 @@
+{
+  "name": "decaying-tic-tac-toe",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@10.30.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "preview": "pnpm --filter web preview"
+  }
+}
