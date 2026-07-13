@@ -8,6 +8,7 @@ import {
 } from "./components/Shell";
 import { useAppBootstrap } from "./hooks/useAppBootstrap";
 import { useGame } from "./hooks/useGame";
+import { ALL_POSITIONS } from "./game/types";
 import type { Player, Pos } from "./game/types";
 
 const APP_TITLE = "Decaying Tic Tac Toe";
@@ -16,6 +17,7 @@ const APP_SUBTITLE = "Marks fade - plan before they disappear.";
 interface GameControlsProps {
   currentPlayer: Player;
   turn: number;
+  openCells: number;
   winner: Player | null;
   winningLine: readonly Pos[] | null;
   isGameOver: boolean;
@@ -26,14 +28,13 @@ interface GameControlsProps {
 function GameControls({
   currentPlayer,
   turn,
+  openCells,
   winner,
   winningLine,
   isGameOver,
   isAITurn,
   onReset,
 }: GameControlsProps) {
-  const turnsUntilDecay = turn === 0 ? 4 : turn % 4 === 0 ? 4 : 4 - (turn % 4);
-
   return (
     <ControlPanel>
       <div className="flex items-center justify-between gap-4">
@@ -78,9 +79,7 @@ function GameControls({
             <p>Turn {turn}</p>
             <p>{isAITurn ? "AI is choosing a move." : "You are up. Claim the board."}</p>
             <p>
-              {turn === 0
-                ? "First decay arrives after 4 turns."
-                : `Decay in ${turnsUntilDecay} ${turnsUntilDecay === 1 ? "turn" : "turns"}.`}
+              {`${openCells} open ${openCells === 1 ? "cell" : "cells"} left before the board would draw and the oldest move decays.`}
             </p>
           </div>
         </div>
@@ -98,11 +97,13 @@ export default function App() {
   const { state, move, reset } = useGame(initialState.game);
   const isGameOver = state.phase === "won";
   const isAITurn = !isGameOver && state.currentPlayer === "O";
+  const openCells = ALL_POSITIONS.length - Object.keys(state.board).length;
 
   const controls = (
     <GameControls
       currentPlayer={state.currentPlayer}
       turn={state.turn}
+      openCells={openCells}
       winner={state.winner}
       winningLine={state.winningLine}
       isGameOver={isGameOver}

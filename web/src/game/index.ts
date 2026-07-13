@@ -1,4 +1,12 @@
-export { applyDecay, createInitialState, formatPos, getOldestPiece, isValidPos, placeMove } from "./engine";
+export {
+  applyDecay,
+  createInitialState,
+  formatPos,
+  getOldestPiece,
+  isBoardFull,
+  isValidPos,
+  placeMove,
+} from "./engine";
 export { checkWin } from "./rules";
 export type {
   Board,

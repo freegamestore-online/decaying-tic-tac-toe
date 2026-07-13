@@ -1,3 +1,4 @@
+import { getOldestPiece } from "../game/engine";
 import type { Board as BoardType, GameState, Pos } from "../game/types";
 import { ALL_POSITIONS, BOARD_SIZE } from "../game/types";
 import { Cell } from "./Cell";
@@ -25,6 +26,8 @@ export function Board({ state, onCellClick }: BoardProps) {
   const lastMove = getLastMove(state.board, state.turn);
   const disabled = state.phase === "won" || state.currentPlayer === "O";
   const winningCells = state.winningLine === null ? null : new Set(state.winningLine);
+  const openCells = ALL_POSITIONS.length - Object.keys(state.board).length;
+  const nextToDecay = openCells === 1 ? getOldestPiece(state) : null;
 
   return (
     <section
@@ -50,6 +53,7 @@ export function Board({ state, onCellClick }: BoardProps) {
               cell={cell}
               isLastMove={pos === lastMove}
               isWinningCell={winningCells?.has(pos) ?? false}
+              isExpiring={pos === nextToDecay}
               disabled={disabled}
               row={row}
               col={col}

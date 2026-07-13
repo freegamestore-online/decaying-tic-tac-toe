@@ -90,40 +90,24 @@ export function placeMove(state: GameState, pos: Pos): PlaceMoveResult {
     winningLine: null,
   };
 
-  if (turn % 4 === 0) {
+  if (isBoardFull(board)) {
     nextState = applyDecay(nextState);
   }
 
   return { success: true, state: nextState };
 }
 
+export function isBoardFull(board: Board): boolean {
+  return ALL_POSITIONS.every((pos) => board[pos] !== undefined);
+}
+
 /**
- * Selects the position to remove on a decay turn.
- * Removes the oldest piece belonging to the player with the most pieces;
- * when counts are tied, removes the globally oldest piece.
+ * Selects the position to remove on a decay turn: the single oldest
+ * move still on the board, regardless of which player placed it.
  */
 export function getOldestPiece(state: GameState): Pos | null {
   const occupied = getOccupiedCells(state.board);
-
-  if (occupied.length === 0) {
-    return null;
-  }
-
-  const countByPlayer = countPieces(occupied);
-  const xCount = countByPlayer.X;
-  const oCount = countByPlayer.O;
-
-  let candidates: readonly OccupiedCell[];
-
-  if (xCount > oCount) {
-    candidates = occupied.filter(([, cell]) => cell.player === "X");
-  } else if (oCount > xCount) {
-    candidates = occupied.filter(([, cell]) => cell.player === "O");
-  } else {
-    candidates = occupied;
-  }
-
-  return findOldestPosition(candidates);
+  return findOldestPosition(occupied);
 }
 
 export function applyDecay(state: GameState): GameState {
@@ -154,21 +138,6 @@ function getOccupiedCells(board: Board): OccupiedCell[] {
   }
 
   return occupied;
-}
-
-function countPieces(cells: readonly OccupiedCell[]): Record<Player, number> {
-  let xCount = 0;
-  let oCount = 0;
-
-  for (const [, cell] of cells) {
-    if (cell.player === "X") {
-      xCount += 1;
-    } else {
-      oCount += 1;
-    }
-  }
-
-  return { X: xCount, O: oCount };
 }
 
 function findOldestPosition(cells: readonly OccupiedCell[]): Pos | null {

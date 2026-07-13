@@ -5,6 +5,7 @@ interface CellProps {
   cell: CellState | undefined;
   isLastMove: boolean;
   isWinningCell: boolean;
+  isExpiring: boolean;
   disabled: boolean;
   row: number;
   col: number;
@@ -17,6 +18,7 @@ export function Cell({
   cell,
   isLastMove,
   isWinningCell,
+  isExpiring,
   disabled,
   row,
   col,
@@ -24,11 +26,10 @@ export function Cell({
   onClick,
 }: CellProps) {
   const isEmpty = cell === undefined;
-  const isExpiring = age !== null && age >= 3;
   const ageLabel = isEmpty || age === null ? null : age.toString();
   const label = isEmpty
     ? `Row ${row + 1}, column ${col + 1}, empty`
-    : `Row ${row + 1}, column ${col + 1}, ${cell.player}, age ${age ?? 0}`;
+    : `Row ${row + 1}, column ${col + 1}, ${cell.player}, age ${age ?? 0}${isExpiring ? ", about to decay" : ""}`;
 
   return (
     <button
