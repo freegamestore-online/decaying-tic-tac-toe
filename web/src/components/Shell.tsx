@@ -1,26 +1,5 @@
 import type { ReactNode } from "react";
 
-interface AppHeaderProps {
-  title: string;
-  subtitle: string;
-}
-
-export function AppHeader({ title, subtitle }: AppHeaderProps) {
-  return (
-    <header className="border-b border-[var(--line)] bg-[var(--glass)] px-4 py-4 backdrop-blur-xl lg:hidden">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl text-[var(--ink)]">{title}</h1>
-          <p className="mt-1 text-sm text-[var(--muted)]">{subtitle}</p>
-        </div>
-        <div className="rounded-full border border-[var(--line)] bg-[var(--panel)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-          AI
-        </div>
-      </div>
-    </header>
-  );
-}
-
 interface SidebarProps {
   title: string;
   subtitle: string;
@@ -29,13 +8,13 @@ interface SidebarProps {
 
 export function Sidebar({ title, subtitle, children }: SidebarProps) {
   return (
-    <aside className="hidden w-[var(--spacing-sidebar)] shrink-0 flex-col border-r border-[var(--line)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--panel)_92%,white),var(--panel))] lg:flex">
-      <div className="border-b border-[var(--line)] px-6 py-6">
-        <div className="mb-4 inline-flex rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,var(--line))] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
+    <aside className="hidden w-[var(--spacing-sidebar)] shrink-0 flex-col overflow-y-auto border-r border-[var(--line)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--panel)_92%,white),var(--panel))] lg:flex">
+      <div className="border-b border-[var(--line)] px-6 py-5">
+        <div className="mb-3 inline-flex rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,var(--line))] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
           Decay mode
         </div>
-        <h1 className="text-3xl text-[var(--ink)]">{title}</h1>
-        <p className="mt-3 max-w-[22ch] text-sm text-[var(--muted)]">{subtitle}</p>
+        <h1 className="text-2xl text-[var(--ink)]">{title}</h1>
+        <p className="mt-2 max-w-[24ch] text-sm text-[var(--muted)]">{subtitle}</p>
       </div>
       <div className="flex flex-1 flex-col gap-4 p-6">{children}</div>
     </aside>

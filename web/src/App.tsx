@@ -1,11 +1,6 @@
+import { GameShell, GameTopbar } from "@freegamestore/games";
 import { Board } from "./components/Board";
-import {
-  AppHeader,
-  BottomDock,
-  ControlPanel,
-  PrimaryButton,
-  Sidebar,
-} from "./components/Shell";
+import { BottomDock, ControlPanel, PrimaryButton, Sidebar } from "./components/Shell";
 import { useAppBootstrap } from "./hooks/useAppBootstrap";
 import { useGame } from "./hooks/useGame";
 import { ALL_POSITIONS } from "./game/types";
@@ -13,6 +8,36 @@ import type { Player, Pos } from "./game/types";
 
 const APP_TITLE = "Decaying Tic Tac Toe";
 const APP_SUBTITLE = "Marks fade - plan before they disappear.";
+
+function GameRules() {
+  return (
+    <div className="space-y-2 text-sm text-[var(--ink)]">
+      <p>Play X and O as usual, taking turns.</p>
+      <p>
+        Whenever your move would leave the board full with no winner, the
+        oldest mark on the board disappears instead of ending in a draw.
+      </p>
+      <p>Get three in a row to win — the game never ties.</p>
+    </div>
+  );
+}
+
+function GameAbout() {
+  return (
+    <p className="text-sm text-[var(--muted)]">
+      Built for{" "}
+      <a
+        href="https://freegamestore.online"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline"
+      >
+        freegamestore.online
+      </a>{" "}
+      — free forever, no tracking.
+    </p>
+  );
+}
 
 interface GameControlsProps {
   currentPlayer: Player;
@@ -113,47 +138,45 @@ export default function App() {
   );
 
   return (
-    <div className="app-shell">
-      <Sidebar title={APP_TITLE} subtitle={APP_SUBTITLE}>
-        {controls}
-      </Sidebar>
+    <GameShell
+      topbar={
+        <GameTopbar
+          title={APP_TITLE}
+          stats={[
+            { label: "Turn", value: state.turn },
+            { label: "Open", value: openCells, accent: openCells <= 2 },
+          ]}
+          rules={<GameRules />}
+          about={<GameAbout />}
+          onRestart={reset}
+        />
+      }
+    >
+      <div className="app-shell">
+        <Sidebar title={APP_TITLE} subtitle={APP_SUBTITLE}>
+          {controls}
+        </Sidebar>
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <AppHeader title={APP_TITLE} subtitle={APP_SUBTITLE} />
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <main className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto px-4 py-4 lg:px-8">
+            {isGameOver && state.winner !== null && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-4 py-3 text-center lg:hidden"
+              >
+                <p className="font-display text-lg font-semibold text-[var(--success)]">
+                  {state.winner} wins!
+                </p>
+              </div>
+            )}
 
-        <main className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-6 lg:px-8">
-          <div className="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--line)] bg-[color-mix(in_srgb,var(--panel)_85%,transparent)] px-4 py-3 text-sm text-[var(--muted)] shadow-[0_18px_40px_rgba(15,23,42,0.06)] backdrop-blur-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span>
-                {isGameOver
-                  ? `Winner: ${state.winner ?? "none"}`
-                  : isAITurn
-                    ? "AI is thinking"
-                    : "Your move"}
-              </span>
-              <span className="font-semibold text-[var(--ink)]">
-                Turn {state.turn}
-              </span>
-            </div>
-          </div>
+            <Board state={state} onCellClick={move} />
+          </main>
 
-          {isGameOver && state.winner !== null && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-4 py-3 text-center lg:hidden"
-            >
-              <p className="font-display text-lg font-semibold text-[var(--success)]">
-                {state.winner} wins!
-              </p>
-            </div>
-          )}
-
-          <Board state={state} onCellClick={move} />
-        </main>
-
-        <BottomDock>{controls}</BottomDock>
+          <BottomDock>{controls}</BottomDock>
+        </div>
       </div>
-    </div>
+    </GameShell>
   );
 }

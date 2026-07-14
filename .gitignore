@@ -6,3 +6,4 @@ Thumbs.db
 dev-dist
 *.log
 guidelines_extracted.txt
+.env

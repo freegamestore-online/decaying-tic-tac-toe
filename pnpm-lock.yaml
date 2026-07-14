@@ -10,6 +10,9 @@ importers:
 
   web:
     dependencies:
+      '@freegamestore/games':
+        specifier: ^0.16.0
+        version: 0.16.0(react@19.2.7)
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -718,6 +721,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@freegamestore/games@0.16.0':
+    resolution: {integrity: sha512-1gQ1zqCJ1O4MyIXbdSFg7Hv1j6Gq6TZiw2eQy4cth0CJe2rbxoNkvzjE4ZVZZ4b9OjZV8IlLdux6tsGEkzYUAw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      react: ^19.0.0
 
   '@isaacs/cliui@9.0.0':
     resolution: {integrity: sha512-AokJm4tuBHillT+FpMtxQ60n8ObyXBatq7jD2/JA9dxbDDokKQm8KMht5ibGzLVU9IJDIKK4TPKgMHEYMn3lMg==}
@@ -2871,6 +2880,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
+
+  '@freegamestore/games@0.16.0(react@19.2.7)':
+    dependencies:
+      react: 19.2.7
 
   '@isaacs/cliui@9.0.0': {}
 
