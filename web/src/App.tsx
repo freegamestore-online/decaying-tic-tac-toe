@@ -48,6 +48,8 @@ interface GameControlsProps {
   isGameOver: boolean;
   isAITurn: boolean;
   onReset: () => void;
+  /** Tighter, single-line rendering for the mobile bottom dock. */
+  compact?: boolean;
 }
 
 function GameControls({
@@ -59,7 +61,43 @@ function GameControls({
   isGameOver,
   isAITurn,
   onReset,
+  compact = false,
 }: GameControlsProps) {
+  const badge = (
+    <span
+      className={[
+        "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-button)] border text-lg font-bold",
+        currentPlayer === "X"
+          ? "border-[var(--line)] bg-[var(--panel)] text-[var(--ink)]"
+          : "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] text-[var(--accent)]",
+      ].join(" ")}
+    >
+      {currentPlayer}
+    </span>
+  );
+
+  if (compact) {
+    return (
+      <ControlPanel compact>
+        {isGameOver && winner !== null ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-[var(--success)]">{winner} wins!</p>
+            <PrimaryButton label="New game" onClick={onReset} fullWidth={false} />
+          </div>
+        ) : (
+          <div className="flex items-center gap-3">
+            {badge}
+            <p className="min-w-0 flex-1 truncate text-xs text-[var(--muted)]">
+              {isAITurn ? "AI is thinking…" : "Your move"} ·{" "}
+              {`${openCells} open ${openCells === 1 ? "cell" : "cells"}`}
+            </p>
+            <PrimaryButton label="New game" onClick={onReset} fullWidth={false} />
+          </div>
+        )}
+      </ControlPanel>
+    );
+  }
+
   return (
     <ControlPanel>
       <div className="flex items-center justify-between gap-4">
@@ -124,18 +162,16 @@ export default function App() {
   const isAITurn = !isGameOver && state.currentPlayer === "O";
   const openCells = ALL_POSITIONS.length - Object.keys(state.board).length;
 
-  const controls = (
-    <GameControls
-      currentPlayer={state.currentPlayer}
-      turn={state.turn}
-      openCells={openCells}
-      winner={state.winner}
-      winningLine={state.winningLine}
-      isGameOver={isGameOver}
-      isAITurn={isAITurn}
-      onReset={reset}
-    />
-  );
+  const sharedProps = {
+    currentPlayer: state.currentPlayer,
+    turn: state.turn,
+    openCells,
+    winner: state.winner,
+    winningLine: state.winningLine,
+    isGameOver,
+    isAITurn,
+    onReset: reset,
+  };
 
   return (
     <GameShell
@@ -154,27 +190,17 @@ export default function App() {
     >
       <div className="app-shell">
         <Sidebar title={APP_TITLE} subtitle={APP_SUBTITLE}>
-          {controls}
+          <GameControls {...sharedProps} />
         </Sidebar>
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <main className="flex flex-1 flex-col items-center justify-center gap-4 overflow-y-auto px-4 py-4 lg:px-8">
-            {isGameOver && state.winner !== null && (
-              <div
-                role="status"
-                aria-live="polite"
-                className="w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--success)] bg-[color-mix(in_srgb,var(--success)_12%,transparent)] px-4 py-3 text-center lg:hidden"
-              >
-                <p className="font-display text-lg font-semibold text-[var(--success)]">
-                  {state.winner} wins!
-                </p>
-              </div>
-            )}
-
+          <main className="flex flex-1 flex-col items-center justify-center gap-3 overflow-y-auto px-3 py-2 lg:gap-4 lg:px-8 lg:py-4">
             <Board state={state} onCellClick={move} />
           </main>
 
-          <BottomDock>{controls}</BottomDock>
+          <BottomDock>
+            <GameControls {...sharedProps} compact />
+          </BottomDock>
         </div>
       </div>
     </GameShell>

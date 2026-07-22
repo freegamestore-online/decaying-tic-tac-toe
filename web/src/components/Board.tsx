@@ -32,7 +32,8 @@ export function Board({ state, onCellClick }: BoardProps) {
   return (
     <section
       aria-label="Game board"
-      className="mx-auto w-full max-w-sm rounded-[var(--radius-card)] border border-[var(--line)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--panel)_92%,transparent),var(--panel))] p-[var(--spacing-card)] shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-sm transition-all duration-300"
+      style={{ width: "min(100%, 24rem, 58vh)" }}
+      className="mx-auto aspect-square shrink-0 rounded-[var(--radius-card)] border border-[var(--line)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--panel)_92%,transparent),var(--panel))] p-3 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-sm transition-all duration-300 sm:p-[var(--spacing-card)]"
     >
       <div
         className="grid aspect-square grid-cols-3 gap-[var(--spacing-grid)]"
