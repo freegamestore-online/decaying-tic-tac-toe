@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@freegamestore/games": "^0.16.0",
+    "@freegamestore/games": "^0.20.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
